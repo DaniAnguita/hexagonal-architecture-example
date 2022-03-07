@@ -1,0 +1,16 @@
+insert into user (email, name, surname, status) values ('user1@test.com', 'Name 1', 'Surname 1', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user2@test.com', 'Name 2', 'Surname 2', 'DEACTIVATED');
+insert into user (email, name, surname, status) values ('user3@test.com', 'Name 3', 'Surname 3', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user4@test.com', 'Name 4', 'Surname 4', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user5@test.com', 'Name 5', 'Surname 5', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user6@test.com', 'Name 6', 'Surname 6', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user7@test.com', 'Name 7', 'Surname 7', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user8@test.com', 'Name 8', 'Surname 8', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user9@test.com', 'Name 9', 'Surname 9', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user10@test.com', 'Name 10', 'Surname 10', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user11@test.com', 'Name 11', 'Surname 11', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user12@test.com', 'Name 12', 'Surname 12', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user13@test.com', 'Name 13', 'Surname 13', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user14@test.com', 'Name 14', 'Surname 14', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user15@test.com', 'Name 15', 'Surname 15', 'ACTIVE');
+insert into user (email, name, surname, status) values ('user16@test.com', 'Name 16', 'Surname 16', 'ACTIVE');
