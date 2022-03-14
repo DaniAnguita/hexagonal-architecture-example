@@ -13,9 +13,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
-import com.company.demo.common.model.Email;
 import com.company.demo.user.exception.UserNotFoundException;
+import com.company.demo.user.model.Email;
+import com.company.demo.user.model.Name;
 import com.company.demo.user.model.Status;
+import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
 import com.company.demo.user.param.GetUserRequest;
 import com.company.demo.user.param.GetUserResponse;
@@ -38,8 +40,8 @@ public class UserServiceImplGetUserUnitTests {
 	User createUser() {
 		return User.builder()
 				.email(new Email("test@test.com"))
-				.name("nametest")
-				.surname("surnametest")
+				.name(new Name("nametest"))
+				.surname(new Surname("surnametest"))
 				.status(Status.ACTIVE)
 				.build();
 	}
@@ -61,8 +63,8 @@ public class UserServiceImplGetUserUnitTests {
 		GetUserResponse result = userService.getUser(new GetUserRequest(1l));
 		
 		assertThat(result.getEmail()).isEqualTo(user.getEmail().getValue());
-		assertThat(result.getName()).isEqualTo(user.getName());
-		assertThat(result.getSurname()).isEqualTo(user.getSurname());
+		assertThat(result.getName()).isEqualTo(user.getName().getValue());
+		assertThat(result.getSurname()).isEqualTo(user.getSurname().getValue());
 		assertThat(result.getStatus()).isEqualTo(user.getStatus());
 	}
 

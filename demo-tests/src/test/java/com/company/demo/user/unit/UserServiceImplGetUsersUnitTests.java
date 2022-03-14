@@ -14,10 +14,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
-import com.company.demo.common.model.Email;
 import com.company.demo.common.model.Pagination;
+import com.company.demo.user.model.Email;
+import com.company.demo.user.model.Name;
 import com.company.demo.user.model.Status;
+import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
+import com.company.demo.user.model.UserId;
 import com.company.demo.user.param.GetUsersRequest;
 import com.company.demo.user.param.GetUsersResponse;
 import com.company.demo.user.param.UserList;
@@ -38,11 +41,23 @@ public class UserServiceImplGetUsersUnitTests {
 	UserPersistencePort userPersistence;
 	
 	private User createUserRequest1() {
-		return User.builder().id(1l).email(new Email("test1@test.com")).name("name1").surname("surname1").status(Status.ACTIVE).build();
+		return User.builder()
+				.id(new UserId(1l))
+				.email(new Email("test1@test.com"))
+				.name(new Name("name1"))
+				.surname(new Surname("surname1"))
+				.status(Status.ACTIVE)
+				.build();
 	}
 	
 	private User createUserRequest2() {
-		return User.builder().id(2l).email(new Email("test2@test.com")).name("name2").surname("surname2").status(Status.DEACTIVATED).build();
+		return User.builder()
+				.id(new UserId(2l))
+				.email(new Email("test2@test.com"))
+				.name(new Name("name2"))
+				.surname(new Surname("surname2"))
+				.status(Status.DEACTIVATED)
+				.build();
 	}
 	
 	private Pagination<User> createPaginationWithUsers() {
@@ -87,7 +102,7 @@ public class UserServiceImplGetUsersUnitTests {
 		User userRequest1 = createUserRequest1();
 		UserList userResponse1 = result.getUsersPagination().getContent().get(0);
 		assertThat(userResponse1.getEmail()).isEqualTo(userRequest1.getEmail().getValue());
-		assertThat(userResponse1.getId()).isEqualTo(userRequest1.getId());
+		assertThat(userResponse1.getId()).isEqualTo(userRequest1.getId().getValue());
 	}
 	
 	@UnitTest
@@ -99,7 +114,7 @@ public class UserServiceImplGetUsersUnitTests {
 		User userRequest2 = createUserRequest2();
 		UserList userResponse2 = result.getUsersPagination().getContent().get(1);
 		assertThat(userResponse2.getEmail()).isEqualTo(userRequest2.getEmail().getValue());
-		assertThat(userResponse2.getId()).isEqualTo(userRequest2.getId());
+		assertThat(userResponse2.getId()).isEqualTo(userRequest2.getId().getValue());
 	}
 	
 	@UnitTest

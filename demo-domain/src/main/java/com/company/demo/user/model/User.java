@@ -1,16 +1,14 @@
 package com.company.demo.user.model;
 
-import com.company.demo.common.model.Email;
-
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
 public class User {
-	Long id;
+	UserId id;
     Email email;
-    String name;
-    String surname;
+    Name name;
+    Surname surname;
     Status status;
 }

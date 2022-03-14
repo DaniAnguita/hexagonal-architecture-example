@@ -11,10 +11,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
-import com.company.demo.common.model.Email;
 import com.company.demo.user.exception.UserAlreadyExistsException;
+import com.company.demo.user.model.Email;
+import com.company.demo.user.model.Name;
 import com.company.demo.user.model.Status;
+import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
+import com.company.demo.user.model.UserId;
 import com.company.demo.user.param.AddUserRequest;
 import com.company.demo.user.param.AddUserResponse;
 import com.company.demo.user.ports.in.UserServicePort;
@@ -54,20 +57,20 @@ public class UserServiceImplAddUserUnitTests {
 	void testAddOk() {
 		AddUserRequest request = createValidRequest();
 		User user = User.builder()
-				.id(100l)
+				.id(new UserId(100l))
 				.email(new Email(request.getEmail()))
-				.name(request.getName())
-				.surname(request.getSurname())
+				.name(new Name(request.getName()))
+				.surname(new Surname(request.getSurname()))
 				.status(Status.ACTIVE)
 				.build();
 		Mockito.when(userPersistence.addUser(Mockito.any(User.class))).thenReturn(user);
 		
 		AddUserResponse result = userService.addUser(request);
 		
-		assertThat(result.getId()).isEqualTo(user.getId());
+		assertThat(result.getId()).isEqualTo(user.getId().getValue());
 		assertThat(result.getEmail()).isEqualTo(user.getEmail().getValue());
-		assertThat(result.getName()).isEqualTo(user.getName());
-		assertThat(result.getSurname()).isEqualTo(user.getSurname());
+		assertThat(result.getName()).isEqualTo(user.getName().getValue());
+		assertThat(result.getSurname()).isEqualTo(user.getSurname().getValue());
 		assertThat(result.getStatus()).isEqualTo(user.getStatus());
 	}
 

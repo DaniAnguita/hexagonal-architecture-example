@@ -4,10 +4,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.company.demo.common.model.Email;
 import com.company.demo.common.model.Pagination;
 import com.company.demo.user.exception.UserNotFoundException;
+import com.company.demo.user.model.Email;
+import com.company.demo.user.model.Name;
 import com.company.demo.user.model.Status;
+import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
 import com.company.demo.user.param.AddUserRequest;
 import com.company.demo.user.param.AddUserResponse;
@@ -33,8 +35,8 @@ public class UserServiceImpl implements UserServicePort {
 		
 		return GetUserResponse.builder()
 				.email(user.getEmail().getValue())
-				.name(user.getName())
-				.surname(user.getSurname())
+				.name(user.getName().getValue())
+				.surname(user.getSurname().getValue())
 				.status(user.getStatus())
 				.build();
 	}
@@ -43,16 +45,16 @@ public class UserServiceImpl implements UserServicePort {
 	public AddUserResponse addUser(AddUserRequest request) {
 		User userDb = userPersistence.addUser(User.builder()
 				.email(new Email(request.getEmail()))
-				.name(request.getName())
-				.surname(request.getSurname())
+				.name(new Name(request.getName()))
+				.surname(new Surname(request.getSurname()))
 				.status(Status.ACTIVE)
 				.build());
 		
 		return AddUserResponse.builder()
-				.id(userDb.getId())
+				.id(userDb.getId().getValue())
 				.email(userDb.getEmail().getValue())
-				.name(userDb.getName())
-				.surname(userDb.getSurname())
+				.name(userDb.getName().getValue())
+				.surname(userDb.getSurname().getValue())
 				.status(userDb.getStatus())
 				.build();
 	}
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserServicePort {
 	public GetUsersResponse getUsers(GetUsersRequest request) {
 		Pagination<UserList> usersPagination = userPersistence.findAll(Optional.ofNullable(request.getPageNumber()))
 				.map(u -> UserList.builder()
-						.id(u.getId())
+						.id(u.getId().getValue())
 						.email(u.getEmail().getValue())
 						.build());
 		
