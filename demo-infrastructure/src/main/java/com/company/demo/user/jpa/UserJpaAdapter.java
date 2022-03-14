@@ -5,16 +5,17 @@ import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import com.company.demo.common.data.Pagination;
-import com.company.demo.user.data.User;
+import com.company.demo.common.model.PagePersistence;
+import com.company.demo.common.model.Pagination;
 import com.company.demo.user.exception.UserAlreadyExistsException;
-import com.company.demo.user.ports.outbound.UserPersistencePort;
+import com.company.demo.user.model.User;
+import com.company.demo.user.ports.out.UserPersistencePort;
 
 import lombok.AllArgsConstructor;
 
-@Service
+@Component
 @AllArgsConstructor
 public class UserJpaAdapter implements UserPersistencePort {
 	
@@ -23,8 +24,7 @@ public class UserJpaAdapter implements UserPersistencePort {
 	@Override
 	public User addUser(User user) {
 		try {
-			UserEntity entity = userRepository.save(UserEntityMapper.INSTANCE.userToEntity(user));
-			return UserEntityMapper.INSTANCE.entityToUser(entity);
+			return userRepository.save(UserEntity.of(user)).toDomain();
 		} catch (DataIntegrityViolationException e) {
 			throw new UserAlreadyExistsException();
 		}
@@ -33,30 +33,20 @@ public class UserJpaAdapter implements UserPersistencePort {
 	@Override
 	public Optional<User> findById(long id) {
 		Optional<UserEntity> entity = userRepository.findById(id);
-		
-		Optional<User> user = Optional.empty();
-		if (entity.isPresent()) {
-			user = Optional.of(UserEntityMapper.INSTANCE.entityToUser(entity.get()));
-		}
-		
-		return user;
+		return entity.isPresent() ? Optional.of(entity.get().toDomain()) : Optional.empty();
 	}
 	
 	@Override
 	public Pagination<User> findAll(Optional<Integer> pageNumber) {
-		int page = pageNumber.isPresent() ? pageNumber.get() - 1 : 0;
-		
 		Page<User> pageUser = userRepository
-				.findAll(PageRequest.of(page, PAGE_SIZE))
-				.map(e -> UserEntityMapper.INSTANCE.entityToUser(e));
+				.findAll(PageRequest.of(calculatePageIndex(pageNumber), PAGE_SIZE))
+				.map(e -> e.toDomain());
 		
-		return Pagination.<User>builder()
-				.pageNumber(pageUser.getNumber())
-				.totalElements(pageUser.getTotalElements())
-				.totalPages(pageUser.getTotalPages())
-				.size(pageUser.getSize())
-				.content(pageUser.getContent())
-				.build();
+		return PagePersistence.<User>of(pageUser).toDomain();
+	}
+	
+	private int calculatePageIndex(Optional<Integer> pageNumber) {
+		return pageNumber.isPresent() ? pageNumber.get() - 1 : 0;
 	}
 
 }

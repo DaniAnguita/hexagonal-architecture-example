@@ -1,9 +1,9 @@
-package com.company.demo.user.ports.outbound;
+package com.company.demo.user.ports.out;
 
 import java.util.Optional;
 
-import com.company.demo.common.data.Pagination;
-import com.company.demo.user.data.User;
+import com.company.demo.common.model.Pagination;
+import com.company.demo.user.model.User;
 
 public interface UserPersistencePort {
 	

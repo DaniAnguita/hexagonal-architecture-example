@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.company.demo.user.model.User;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,4 +29,12 @@ public class UserEntity {
     private String name;
     private String surname;
     private String status;
+    
+    public static UserEntity of(User user) {
+    	return UserEntityMapper.INSTANCE.domainToEntity(user);
+    }
+    
+    public User toDomain() {
+    	return UserEntityMapper.INSTANCE.entityToDomain(this);
+    }
 }

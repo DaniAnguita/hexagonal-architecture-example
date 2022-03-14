@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 import com.company.demo.UnitTest;
-import com.company.demo.common.data.Pagination;
+import com.company.demo.common.model.Pagination;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 

@@ -13,13 +13,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
-import com.company.demo.user.data.Status;
-import com.company.demo.user.data.User;
-import com.company.demo.user.dto.GetUserRequestDto;
-import com.company.demo.user.dto.GetUserResponseDto;
+import com.company.demo.common.model.Email;
 import com.company.demo.user.exception.UserNotFoundException;
-import com.company.demo.user.ports.inbound.UserServicePort;
-import com.company.demo.user.ports.outbound.UserPersistencePort;
+import com.company.demo.user.model.Status;
+import com.company.demo.user.model.User;
+import com.company.demo.user.param.GetUserRequest;
+import com.company.demo.user.param.GetUserResponse;
+import com.company.demo.user.ports.in.UserServicePort;
+import com.company.demo.user.ports.out.UserPersistencePort;
 import com.company.demo.user.service.UserServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -36,7 +37,7 @@ public class UserServiceImplGetUserUnitTests {
 	
 	User createUser() {
 		return User.builder()
-				.email("test@test.com")
+				.email(new Email("test@test.com"))
 				.name("nametest")
 				.surname("surnametest")
 				.status(Status.ACTIVE)
@@ -48,7 +49,7 @@ public class UserServiceImplGetUserUnitTests {
 		Mockito.when(userPersistence.findById(1l)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(UserNotFoundException.class, () -> {
-			userService.getUser(GetUserRequestDto.builder().id(1l).build());
+			userService.getUser(new GetUserRequest(1l));
 		});
 	}
 	
@@ -57,9 +58,9 @@ public class UserServiceImplGetUserUnitTests {
 		User user = createUser();
 		Mockito.when(userPersistence.findById(1l)).thenReturn(Optional.of(user));
 		
-		GetUserResponseDto result = userService.getUser(GetUserRequestDto.builder().id(1l).build());
+		GetUserResponse result = userService.getUser(new GetUserRequest(1l));
 		
-		assertThat(result.getEmail()).isEqualTo(user.getEmail());
+		assertThat(result.getEmail()).isEqualTo(user.getEmail().getValue());
 		assertThat(result.getName()).isEqualTo(user.getName());
 		assertThat(result.getSurname()).isEqualTo(user.getSurname());
 		assertThat(result.getStatus()).isEqualTo(user.getStatus());

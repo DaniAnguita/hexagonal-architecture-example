@@ -11,13 +11,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
-import com.company.demo.user.data.Status;
-import com.company.demo.user.data.User;
-import com.company.demo.user.dto.AddUserRequestDto;
-import com.company.demo.user.dto.AddUserResponseDto;
+import com.company.demo.common.model.Email;
 import com.company.demo.user.exception.UserAlreadyExistsException;
-import com.company.demo.user.ports.inbound.UserServicePort;
-import com.company.demo.user.ports.outbound.UserPersistencePort;
+import com.company.demo.user.model.Status;
+import com.company.demo.user.model.User;
+import com.company.demo.user.param.AddUserRequest;
+import com.company.demo.user.param.AddUserResponse;
+import com.company.demo.user.ports.in.UserServicePort;
+import com.company.demo.user.ports.out.UserPersistencePort;
 import com.company.demo.user.service.UserServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -32,8 +33,8 @@ public class UserServiceImplAddUserUnitTests {
 	@MockBean
 	UserPersistencePort userPersistence;
 	
-	AddUserRequestDto createValidRequest() {
-		return AddUserRequestDto.builder()
+	AddUserRequest createValidRequest() {
+		return AddUserRequest.builder()
 				.email("test@test.com")
 				.name("name")
 				.surname("surname")
@@ -51,20 +52,20 @@ public class UserServiceImplAddUserUnitTests {
 	
 	@UnitTest
 	void testAddOk() {
-		AddUserRequestDto request = createValidRequest();
+		AddUserRequest request = createValidRequest();
 		User user = User.builder()
 				.id(100l)
-				.email(request.getEmail())
+				.email(new Email(request.getEmail()))
 				.name(request.getName())
 				.surname(request.getSurname())
 				.status(Status.ACTIVE)
 				.build();
 		Mockito.when(userPersistence.addUser(Mockito.any(User.class))).thenReturn(user);
 		
-		AddUserResponseDto result = userService.addUser(request);
+		AddUserResponse result = userService.addUser(request);
 		
 		assertThat(result.getId()).isEqualTo(user.getId());
-		assertThat(result.getEmail()).isEqualTo(user.getEmail());
+		assertThat(result.getEmail()).isEqualTo(user.getEmail().getValue());
 		assertThat(result.getName()).isEqualTo(user.getName());
 		assertThat(result.getSurname()).isEqualTo(user.getSurname());
 		assertThat(result.getStatus()).isEqualTo(user.getStatus());

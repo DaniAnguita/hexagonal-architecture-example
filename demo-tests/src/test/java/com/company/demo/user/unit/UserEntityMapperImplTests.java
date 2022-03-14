@@ -9,12 +9,12 @@ public class UserEntityMapperImplTests {
 
 	@UnitTest
 	void testUserToEntityNull() {
-		assertThat(UserEntityMapper.INSTANCE.userToEntity(null)).isEqualTo(null);
+		assertThat(UserEntityMapper.INSTANCE.domainToEntity(null)).isEqualTo(null);
 	}
 
 	@UnitTest
 	void testEntityToUserNull() {
-		assertThat(UserEntityMapper.INSTANCE.entityToUser(null)).isEqualTo(null);
+		assertThat(UserEntityMapper.INSTANCE.entityToDomain(null)).isEqualTo(null);
 	}
 	
 }

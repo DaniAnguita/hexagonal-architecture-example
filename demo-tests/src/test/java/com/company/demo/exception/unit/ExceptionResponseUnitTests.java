@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Map;
 
 import com.company.demo.UnitTest;
-import com.company.demo.common.data.ExceptionResponse;
+import com.company.demo.common.model.ExceptionResponse;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 

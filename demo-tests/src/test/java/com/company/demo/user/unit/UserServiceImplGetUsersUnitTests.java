@@ -14,14 +14,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
-import com.company.demo.common.data.Pagination;
-import com.company.demo.user.data.Status;
-import com.company.demo.user.data.User;
-import com.company.demo.user.dto.GetUsersRequestDto;
-import com.company.demo.user.dto.GetUsersResponseDto;
-import com.company.demo.user.dto.UserListDto;
-import com.company.demo.user.ports.inbound.UserServicePort;
-import com.company.demo.user.ports.outbound.UserPersistencePort;
+import com.company.demo.common.model.Email;
+import com.company.demo.common.model.Pagination;
+import com.company.demo.user.model.Status;
+import com.company.demo.user.model.User;
+import com.company.demo.user.param.GetUsersRequest;
+import com.company.demo.user.param.GetUsersResponse;
+import com.company.demo.user.param.UserList;
+import com.company.demo.user.ports.in.UserServicePort;
+import com.company.demo.user.ports.out.UserPersistencePort;
 import com.company.demo.user.service.UserServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -37,11 +38,11 @@ public class UserServiceImplGetUsersUnitTests {
 	UserPersistencePort userPersistence;
 	
 	private User createUserRequest1() {
-		return User.builder().id(1l).email("test1@test.com").name("name1").surname("surname1").status(Status.ACTIVE).build();
+		return User.builder().id(1l).email(new Email("test1@test.com")).name("name1").surname("surname1").status(Status.ACTIVE).build();
 	}
 	
 	private User createUserRequest2() {
-		return User.builder().id(2l).email("test2@test.com").name("name2").surname("surname2").status(Status.DEACTIVATED).build();
+		return User.builder().id(2l).email(new Email("test2@test.com")).name("name2").surname("surname2").status(Status.DEACTIVATED).build();
 	}
 	
 	private Pagination<User> createPaginationWithUsers() {
@@ -68,7 +69,7 @@ public class UserServiceImplGetUsersUnitTests {
 	void testPaginationExistsUsers() {
 		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithUsers());
 		
-		GetUsersResponseDto result = userService.getUsers(GetUsersRequestDto.builder().pageNumber(null).build());
+		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
 		
 		assertThat(result.getUsersPagination().getPageNumber()).isEqualTo(1);
 		assertThat(result.getUsersPagination().getTotalElements()).isEqualTo(2);
@@ -81,11 +82,11 @@ public class UserServiceImplGetUsersUnitTests {
 	void testUser1ExistsUsers() {
 		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithUsers());
 		
-		GetUsersResponseDto result = userService.getUsers(GetUsersRequestDto.builder().pageNumber(null).build());
+		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
 		
 		User userRequest1 = createUserRequest1();
-		UserListDto userResponse1 = result.getUsersPagination().getContent().get(0);
-		assertThat(userResponse1.getEmail()).isEqualTo(userRequest1.getEmail());
+		UserList userResponse1 = result.getUsersPagination().getContent().get(0);
+		assertThat(userResponse1.getEmail()).isEqualTo(userRequest1.getEmail().getValue());
 		assertThat(userResponse1.getId()).isEqualTo(userRequest1.getId());
 	}
 	
@@ -93,11 +94,11 @@ public class UserServiceImplGetUsersUnitTests {
 	void testUser2ExistsUsers() {
 		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithUsers());
 		
-		GetUsersResponseDto result = userService.getUsers(GetUsersRequestDto.builder().pageNumber(null).build());
+		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
 		
 		User userRequest2 = createUserRequest2();
-		UserListDto userResponse2 = result.getUsersPagination().getContent().get(1);
-		assertThat(userResponse2.getEmail()).isEqualTo(userRequest2.getEmail());
+		UserList userResponse2 = result.getUsersPagination().getContent().get(1);
+		assertThat(userResponse2.getEmail()).isEqualTo(userRequest2.getEmail().getValue());
 		assertThat(userResponse2.getId()).isEqualTo(userRequest2.getId());
 	}
 	
@@ -105,7 +106,7 @@ public class UserServiceImplGetUsersUnitTests {
 	void testNotExistsUsers() {
 		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithoutUsers());
 		
-		GetUsersResponseDto result = userService.getUsers(GetUsersRequestDto.builder().pageNumber(null).build());
+		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
 		
 		assertThat(result.getUsersPagination().getPageNumber()).isEqualTo(1);
 		assertThat(result.getUsersPagination().getTotalElements()).isEqualTo(0);

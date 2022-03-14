@@ -1,4 +1,4 @@
-package com.company.demo.exception;
+package com.company.demo.exception.api;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.company.demo.common.data.ExceptionResponse;
+import com.company.demo.common.model.ExceptionResponse;
 
 @RestControllerAdvice
 public class GenericExceptionHandler {

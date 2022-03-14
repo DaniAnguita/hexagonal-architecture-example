@@ -1,13 +1,13 @@
-package com.company.demo.user.dto;
+package com.company.demo.user.param;
 
-import com.company.demo.user.data.Status;
+import com.company.demo.user.model.Status;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class GetUserResponseDto {
+public class GetUserResponse {
 	String email;
     String name;
     String surname;

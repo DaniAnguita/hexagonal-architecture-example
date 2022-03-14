@@ -1,4 +1,4 @@
-package com.company.demo.user;
+package com.company.demo.user.api.dto;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
@@ -10,6 +10,6 @@ import lombok.Getter;
 @Relation(itemRelation = "user", collectionRelation = "users")
 @Getter
 @AllArgsConstructor
-public class GetUsersResponseDtoModel extends RepresentationModel<GetUsersResponseDtoModel> {
+public class GetUsersResponseModel extends RepresentationModel<GetUsersResponseModel> {
 	private final PageMetadata pagination;
 }

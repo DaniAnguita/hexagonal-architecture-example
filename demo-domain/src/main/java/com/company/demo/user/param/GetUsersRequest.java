@@ -1,4 +1,4 @@
-package com.company.demo.user.dto;
+package com.company.demo.user.param;
 
 import javax.validation.constraints.Min;
 
@@ -7,7 +7,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class GetUserRequestDto {
-	@Min(value = 1)
-	Long id;
+public class GetUsersRequest {
+	@Min(value = 0)
+	Integer pageNumber;
 }

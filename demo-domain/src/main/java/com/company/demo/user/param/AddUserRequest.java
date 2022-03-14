@@ -1,4 +1,4 @@
-package com.company.demo.user.dto;
+package com.company.demo.user.param;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -11,7 +11,7 @@ import lombok.With;
 @Value
 @Builder
 @With
-public class AddUserRequestDto {
+public class AddUserRequest {
 	@Email
 	@NotEmpty
     String email;

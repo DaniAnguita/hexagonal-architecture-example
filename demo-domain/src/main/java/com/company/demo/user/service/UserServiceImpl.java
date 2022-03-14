@@ -4,19 +4,20 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.company.demo.common.data.Pagination;
-import com.company.demo.user.data.Status;
-import com.company.demo.user.data.User;
-import com.company.demo.user.dto.AddUserRequestDto;
-import com.company.demo.user.dto.AddUserResponseDto;
-import com.company.demo.user.dto.GetUserRequestDto;
-import com.company.demo.user.dto.GetUserResponseDto;
-import com.company.demo.user.dto.GetUsersRequestDto;
-import com.company.demo.user.dto.GetUsersResponseDto;
-import com.company.demo.user.dto.UserListDto;
+import com.company.demo.common.model.Email;
+import com.company.demo.common.model.Pagination;
 import com.company.demo.user.exception.UserNotFoundException;
-import com.company.demo.user.ports.inbound.UserServicePort;
-import com.company.demo.user.ports.outbound.UserPersistencePort;
+import com.company.demo.user.model.Status;
+import com.company.demo.user.model.User;
+import com.company.demo.user.param.AddUserRequest;
+import com.company.demo.user.param.AddUserResponse;
+import com.company.demo.user.param.GetUserRequest;
+import com.company.demo.user.param.GetUserResponse;
+import com.company.demo.user.param.GetUsersRequest;
+import com.company.demo.user.param.GetUsersResponse;
+import com.company.demo.user.param.UserList;
+import com.company.demo.user.ports.in.UserServicePort;
+import com.company.demo.user.ports.out.UserPersistencePort;
 
 import lombok.AllArgsConstructor;
 
@@ -27,11 +28,11 @@ public class UserServiceImpl implements UserServicePort {
 	private final UserPersistencePort userPersistence;
 
 	@Override
-	public GetUserResponseDto getUser(GetUserRequestDto request) {
+	public GetUserResponse getUser(GetUserRequest request) {
 		User user = userPersistence.findById(request.getId()).orElseThrow(UserNotFoundException::new);
 		
-		return GetUserResponseDto.builder()
-				.email(user.getEmail())
+		return GetUserResponse.builder()
+				.email(user.getEmail().getValue())
 				.name(user.getName())
 				.surname(user.getSurname())
 				.status(user.getStatus())
@@ -39,17 +40,17 @@ public class UserServiceImpl implements UserServicePort {
 	}
 	
 	@Override
-	public AddUserResponseDto addUser(AddUserRequestDto request) {
+	public AddUserResponse addUser(AddUserRequest request) {
 		User userDb = userPersistence.addUser(User.builder()
-				.email(request.getEmail())
+				.email(new Email(request.getEmail()))
 				.name(request.getName())
 				.surname(request.getSurname())
 				.status(Status.ACTIVE)
 				.build());
 		
-		return AddUserResponseDto.builder()
+		return AddUserResponse.builder()
 				.id(userDb.getId())
-				.email(userDb.getEmail())
+				.email(userDb.getEmail().getValue())
 				.name(userDb.getName())
 				.surname(userDb.getSurname())
 				.status(userDb.getStatus())
@@ -57,14 +58,14 @@ public class UserServiceImpl implements UserServicePort {
 	}
 	
 	@Override
-	public GetUsersResponseDto getUsers(GetUsersRequestDto request) {
-		Pagination<UserListDto> usersPagination = userPersistence.findAll(Optional.ofNullable(request.getPageNumber()))
-				.map(u -> UserListDto.builder()
+	public GetUsersResponse getUsers(GetUsersRequest request) {
+		Pagination<UserList> usersPagination = userPersistence.findAll(Optional.ofNullable(request.getPageNumber()))
+				.map(u -> UserList.builder()
 						.id(u.getId())
-						.email(u.getEmail())
+						.email(u.getEmail().getValue())
 						.build());
 		
-		return GetUsersResponseDto.builder().usersPagination(usersPagination).build();
+		return GetUsersResponse.builder().usersPagination(usersPagination).build();
 	}
 	
 }

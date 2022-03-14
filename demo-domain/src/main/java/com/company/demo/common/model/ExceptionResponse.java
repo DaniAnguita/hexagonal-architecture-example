@@ -1,4 +1,4 @@
-package com.company.demo.common.data;
+package com.company.demo.common.model;
 
 import java.util.Map;
 
