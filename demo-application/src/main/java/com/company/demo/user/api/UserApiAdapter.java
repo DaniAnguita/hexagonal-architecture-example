@@ -17,12 +17,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.company.demo.common.model.Pagination;
+import com.company.demo.user.api.dto.AddUserRequestDto;
 import com.company.demo.user.api.dto.AddUserResponseDto;
 import com.company.demo.user.api.dto.GetUserResponseDto;
 import com.company.demo.user.api.dto.GetUsersResponseDto;
 import com.company.demo.user.api.dto.GetUsersResponseModel;
 import com.company.demo.user.api.dto.UserListDto;
-import com.company.demo.user.param.AddUserRequest;
 import com.company.demo.user.param.GetUserRequest;
 import com.company.demo.user.param.GetUsersRequest;
 import com.company.demo.user.param.GetUsersResponse;
@@ -48,9 +48,9 @@ public class UserApiAdapter {
 		return linkTo(methodOn(UserApiController.class).getUser(id)).withSelfRel();
 	}
 
-	public ResponseEntity<AddUserResponseDto> addUser(AddUserRequest request) {
+	public ResponseEntity<AddUserResponseDto> addUser(AddUserRequestDto request) {
         return new ResponseEntity<>(
-        		AddUserResponseDto.of(userService.addUser(request)),
+        		AddUserResponseDto.of(userService.addUser(request.toDomain())),
         		HttpStatus.CREATED);
 	}
 

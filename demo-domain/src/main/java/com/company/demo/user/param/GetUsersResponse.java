@@ -2,11 +2,11 @@ package com.company.demo.user.param;
 
 import com.company.demo.common.model.Pagination;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 
 @Value
-@Builder
+@AllArgsConstructor
 public class GetUsersResponse {
 	Pagination<UserList> usersPagination;
 }

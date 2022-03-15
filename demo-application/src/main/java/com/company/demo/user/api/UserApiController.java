@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.demo.common.model.ExceptionResponse;
+import com.company.demo.user.api.dto.AddUserRequestDto;
 import com.company.demo.user.api.dto.AddUserResponseDto;
 import com.company.demo.user.api.dto.GetUserResponseDto;
 import com.company.demo.user.exception.UserAlreadyExistsException;
 import com.company.demo.user.exception.UserNotFoundException;
-import com.company.demo.user.param.AddUserRequest;
 
 import lombok.AllArgsConstructor;
 
@@ -40,7 +40,7 @@ public class UserApiController {
 	}
 
     @PostMapping
-    public ResponseEntity<AddUserResponseDto> addUser(@RequestBody AddUserRequest request) {
+    public ResponseEntity<AddUserResponseDto> addUser(@RequestBody AddUserRequestDto request) {
     	return userAdapter.addUser(request);
     }
 	

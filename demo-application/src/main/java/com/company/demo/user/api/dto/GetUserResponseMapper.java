@@ -10,6 +10,4 @@ public interface GetUserResponseMapper {
 	GetUserResponseMapper INSTANCE = Mappers.getMapper(GetUserResponseMapper.class);
 
 	GetUserResponseDto domainToDto(GetUserResponse response);
-	
-	GetUserResponse dtoToDomain(GetUserResponseDto dto);
 }

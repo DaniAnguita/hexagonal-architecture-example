@@ -32,13 +32,7 @@ public class UserServiceImpl implements UserServicePort {
 	@Override
 	public GetUserResponse getUser(GetUserRequest request) {
 		User user = userPersistence.findById(request.getId()).orElseThrow(UserNotFoundException::new);
-		
-		return GetUserResponse.builder()
-				.email(user.getEmail().getValue())
-				.name(user.getName().getValue())
-				.surname(user.getSurname().getValue())
-				.status(user.getStatus())
-				.build();
+		return GetUserResponse.of(user);
 	}
 	
 	@Override
@@ -50,13 +44,7 @@ public class UserServiceImpl implements UserServicePort {
 				.status(Status.ACTIVE)
 				.build());
 		
-		return AddUserResponse.builder()
-				.id(userDb.getId().getValue())
-				.email(userDb.getEmail().getValue())
-				.name(userDb.getName().getValue())
-				.surname(userDb.getSurname().getValue())
-				.status(userDb.getStatus())
-				.build();
+		return AddUserResponse.of(userDb);
 	}
 	
 	@Override
@@ -67,7 +55,7 @@ public class UserServiceImpl implements UserServicePort {
 						.email(u.getEmail().getValue())
 						.build());
 		
-		return GetUsersResponse.builder().usersPagination(usersPagination).build();
+		return new GetUsersResponse(usersPagination);
 	}
 	
 }

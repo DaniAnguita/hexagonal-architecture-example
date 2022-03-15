@@ -39,31 +39,31 @@ public interface UserEntityMapper {
 	
 	@Named("emailToString")
 	default String emailToString(Email email) {
-		return email.getValue();
+		return email != null ? email.getValue() : null;
 	}
 	
 	@Named("stringToEmail")
 	default Email stringToEmail(String emailValue) {
-		return new Email(emailValue);
+		return emailValue != null ? new Email(emailValue) : null;
 	}
 	
 	@Named("nameToString")
 	default String nameToString(Name name) {
-		return name.getValue();
+		return name != null ? name.getValue() : null;
 	}
 	
 	@Named("stringToName")
 	default Name stringToName(String nameValue) {
-		return new Name(nameValue);
+		return nameValue != null ? new Name(nameValue) : null;
 	}
 	
 	@Named("surnameToString")
 	default String surnameToString(Surname surname) {
-		return surname.getValue();
+		return surname != null ? surname.getValue() : null;
 	}
 	
 	@Named("stringToSurname")
 	default Surname stringToSurname(String surnameValue) {
-		return new Surname(surnameValue);
+		return surnameValue != null ? new Surname(surnameValue) : null;
 	}
 }
