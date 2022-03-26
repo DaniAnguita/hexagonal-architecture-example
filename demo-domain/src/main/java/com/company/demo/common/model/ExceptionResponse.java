@@ -2,11 +2,11 @@ package com.company.demo.common.model;
 
 import java.util.Map;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 
 @Value
-@Builder
+@AllArgsConstructor
 public class ExceptionResponse {
 	Map<String, String> errors;
 }

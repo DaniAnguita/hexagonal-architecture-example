@@ -23,9 +23,11 @@ public class GenericExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleBeanValidationException(ConstraintViolationException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ExceptionResponse.builder()
-            			.errors(getErrors(exception.getConstraintViolations()))
-            			.build());
+                .body(getResponse(exception));
+    }
+    
+    private ExceptionResponse getResponse(ConstraintViolationException exception) {
+    	return new ExceptionResponse(getErrors(exception.getConstraintViolations()));
     }
     
 	private Map<String, String> getErrors(Set<ConstraintViolation<?>> constraints) {

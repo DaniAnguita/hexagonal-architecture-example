@@ -1,9 +1,8 @@
 package com.company.demo.user.api;
 
 import java.util.Collections;
-import java.util.Locale;
+import java.util.Map;
 
-import org.springframework.context.MessageSource;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,7 @@ import lombok.AllArgsConstructor;
 public class UserApiController {
 	
 	private final UserApiAdapter userAdapter;
-	private final MessageSource messageSource;
+	private final UserMessageSource userMessageSource;
 
 	@GetMapping("/{id}")
 	public EntityModel<GetUserResponseDto> getUser(@PathVariable Long id) {
@@ -57,12 +56,11 @@ public class UserApiController {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception, Locale locale) {
+    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+    	Map<String, String> errors = Collections.singletonMap("email", userMessageSource.getMessageUserAlreadyExists());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ExceptionResponse.builder()
-            			.errors(Collections.singletonMap("email", messageSource.getMessage("user.already.exists", null, locale)))
-            			.build());
+                .body(new ExceptionResponse(errors));
     }
 	
 }
