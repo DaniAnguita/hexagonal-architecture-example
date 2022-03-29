@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
 import com.company.demo.user.exception.UserAlreadyExistsException;
+import com.company.demo.user.exception.UserValidationCanBeAddedException;
 import com.company.demo.user.model.Email;
 import com.company.demo.user.model.Name;
 import com.company.demo.user.model.Status;
@@ -54,11 +55,9 @@ public class UserServiceImplAddUserUnitTests {
 	@UnitTest
 	void testAddOk() {
 		User user = User.builder()
-				.id(new UserId(100l))
 				.email(new Email("test@test.com"))
 				.name(new Name("name"))
 				.surname(new Surname("surname"))
-				.status(Status.ACTIVE)
 				.build();
 		Mockito.when(userPersistence.addUser(Mockito.any(User.class))).thenReturn(user);
 		
@@ -70,5 +69,48 @@ public class UserServiceImplAddUserUnitTests {
 		assertThat(userResult.getSurname()).isEqualTo(user.getSurname());
 		assertThat(userResult.getStatus()).isEqualTo(user.getStatus());
 	}
+	
+	@UnitTest
+	void testAddKoIdNotNull() {
+		User user = User.builder()
+				.id(new UserId(1l))
+				.email(new Email("test@test.com"))
+				.name(new Name("name"))
+				.surname(new Surname("surname"))
+				.build();
+		
+		Assertions.assertThrows(UserValidationCanBeAddedException.class, () -> {
+			userService.addUser(user);
+		});
+	}
 
+	
+	@UnitTest
+	void testAddKoStatusActive() {
+		User user = User.builder()
+				.email(new Email("test@test.com"))
+				.name(new Name("name"))
+				.surname(new Surname("surname"))
+				.status(Status.ACTIVE)
+				.build();
+		
+		Assertions.assertThrows(UserValidationCanBeAddedException.class, () -> {
+			userService.addUser(user);
+		});
+	}
+
+	
+	@UnitTest
+	void testAddKoStatusDeactivated() {
+		User user = User.builder()
+				.email(new Email("test@test.com"))
+				.name(new Name("name"))
+				.surname(new Surname("surname"))
+				.status(Status.DEACTIVATED)
+				.build();
+		
+		Assertions.assertThrows(UserValidationCanBeAddedException.class, () -> {
+			userService.addUser(user);
+		});
+	}
 }

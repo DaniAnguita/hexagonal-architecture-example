@@ -10,7 +10,7 @@ import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper=false)
-public class PageNumber extends DomainModel<PageNumber> {
+public class PageNumber extends DomainValueObject {
 	@NotNull
 	@Min(1)
 	Integer value;

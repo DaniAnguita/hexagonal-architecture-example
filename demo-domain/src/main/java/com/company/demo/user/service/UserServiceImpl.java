@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserServicePort {
 	
 	@Override
 	public User addUser(User user) {
+		user.validateUserCanBeAdded();
+		
 		return userPersistence.addUser(User.builder()
 				.email(user.getEmail())
 				.name(user.getName())

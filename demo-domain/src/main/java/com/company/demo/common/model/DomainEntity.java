@@ -8,14 +8,13 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-public abstract class DomainModel<T> {
+public abstract class DomainEntity {
 
-	@SuppressWarnings("unchecked")
-	protected void validateSelf(Supplier<? extends RuntimeException> exceptionSupplier) {
+	protected void validateSelf(Supplier<? extends RuntimeException> exceptionSupplier, Class<?>... groups) {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 		
-		Set<ConstraintViolation<T>> violations = validator.validate((T) this);
+		Set<ConstraintViolation<DomainEntity>> violations = validator.validate(this, groups);
 		if (!violations.isEmpty()) {
 			throw exceptionSupplier.get();
 		}
