@@ -18,8 +18,6 @@ import com.company.demo.user.model.Status;
 import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
 import com.company.demo.user.model.UserId;
-import com.company.demo.user.param.AddUserRequest;
-import com.company.demo.user.param.AddUserResponse;
 import com.company.demo.user.ports.in.UserServicePort;
 import com.company.demo.user.ports.out.UserPersistencePort;
 import com.company.demo.user.service.UserServiceImpl;
@@ -36,11 +34,11 @@ public class UserServiceImplAddUserUnitTests {
 	@MockBean
 	UserPersistencePort userPersistence;
 	
-	AddUserRequest createValidRequest() {
-		return AddUserRequest.builder()
-				.email("test@test.com")
-				.name("name")
-				.surname("surname")
+	User createValidUser() {
+		return User.builder()
+				.email(new Email("test@test.com"))
+				.name(new Name("name"))
+				.surname(new Surname("surname"))
 				.build();
 	}
 	
@@ -49,29 +47,28 @@ public class UserServiceImplAddUserUnitTests {
 		Mockito.when(userPersistence.addUser(Mockito.any(User.class))).thenThrow(new UserAlreadyExistsException());
 		
 		Assertions.assertThrows(UserAlreadyExistsException.class, () -> {
-			userService.addUser(createValidRequest());
+			userService.addUser(createValidUser());
 		});
 	}
 	
 	@UnitTest
 	void testAddOk() {
-		AddUserRequest request = createValidRequest();
 		User user = User.builder()
 				.id(new UserId(100l))
-				.email(new Email(request.getEmail()))
-				.name(new Name(request.getName()))
-				.surname(new Surname(request.getSurname()))
+				.email(new Email("test@test.com"))
+				.name(new Name("name"))
+				.surname(new Surname("surname"))
 				.status(Status.ACTIVE)
 				.build();
 		Mockito.when(userPersistence.addUser(Mockito.any(User.class))).thenReturn(user);
 		
-		AddUserResponse result = userService.addUser(request);
+		User userResult = userService.addUser(user);
 		
-		assertThat(result.getId()).isEqualTo(user.getId().getValue());
-		assertThat(result.getEmail()).isEqualTo(user.getEmail().getValue());
-		assertThat(result.getName()).isEqualTo(user.getName().getValue());
-		assertThat(result.getSurname()).isEqualTo(user.getSurname().getValue());
-		assertThat(result.getStatus()).isEqualTo(user.getStatus());
+		assertThat(userResult.getId()).isEqualTo(user.getId());
+		assertThat(userResult.getEmail()).isEqualTo(user.getEmail());
+		assertThat(userResult.getName()).isEqualTo(user.getName());
+		assertThat(userResult.getSurname()).isEqualTo(user.getSurname());
+		assertThat(userResult.getStatus()).isEqualTo(user.getStatus());
 	}
 
 }

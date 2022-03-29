@@ -1,22 +1,27 @@
 package com.company.demo.user.api.dto;
 
-import com.company.demo.user.param.AddUserRequest;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 
 @Value
 @Builder
+@With
 public class AddUserRequestDto {
+	@Email
+	@NotEmpty
 	String email;
-	String name;
-	String surname;
 	
-	public AddUserRequest toDomain() {
-		return AddUserRequest.builder()
-				.email(email)
-				.name(name)
-				.surname(surname)
-				.build();
-	}
+	@NotNull
+	@Size(min = 3, max = 40)
+	String name;
+	
+	@NotNull
+	@Size(min = 3, max = 80)
+	String surname;
 }

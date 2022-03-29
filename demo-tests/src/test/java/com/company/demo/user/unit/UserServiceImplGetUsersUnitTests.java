@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -14,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.company.demo.UnitTest;
+import com.company.demo.common.model.PageNumber;
 import com.company.demo.common.model.Pagination;
 import com.company.demo.user.model.Email;
 import com.company.demo.user.model.Name;
@@ -21,9 +21,6 @@ import com.company.demo.user.model.Status;
 import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
 import com.company.demo.user.model.UserId;
-import com.company.demo.user.param.GetUsersRequest;
-import com.company.demo.user.param.GetUsersResponse;
-import com.company.demo.user.param.UserList;
 import com.company.demo.user.ports.in.UserServicePort;
 import com.company.demo.user.ports.out.UserPersistencePort;
 import com.company.demo.user.service.UserServiceImpl;
@@ -82,51 +79,53 @@ public class UserServiceImplGetUsersUnitTests {
 	
 	@UnitTest
 	void testPaginationExistsUsers() {
-		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithUsers());
+		PageNumber pageNumber = new PageNumber(1);
+		Mockito.when(userPersistence.findAll(pageNumber)).thenReturn(createPaginationWithUsers());
 		
-		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
+		Pagination<User> result = userService.getUsers(pageNumber);
 		
-		assertThat(result.getUsersPagination().getPageNumber()).isEqualTo(1);
-		assertThat(result.getUsersPagination().getTotalElements()).isEqualTo(2);
-		assertThat(result.getUsersPagination().getTotalPages()).isEqualTo(1);
-		assertThat(result.getUsersPagination().getSize()).isEqualTo(15);
-		assertThat(result.getUsersPagination().getContent().size()).isEqualTo(2);
+		assertThat(result.getPageNumber()).isEqualTo(1);
+		assertThat(result.getTotalElements()).isEqualTo(2);
+		assertThat(result.getTotalPages()).isEqualTo(1);
+		assertThat(result.getSize()).isEqualTo(15);
+		assertThat(result.getContent().size()).isEqualTo(2);
 	}
 	
 	@UnitTest
 	void testUser1ExistsUsers() {
-		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithUsers());
+		PageNumber pageNumber = new PageNumber(1);
+		Mockito.when(userPersistence.findAll(pageNumber)).thenReturn(createPaginationWithUsers());
 		
-		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
+		Pagination<User> result = userService.getUsers(pageNumber);
 		
 		User userRequest1 = createUserRequest1();
-		UserList userResponse1 = result.getUsersPagination().getContent().get(0);
-		assertThat(userResponse1.getEmail()).isEqualTo(userRequest1.getEmail().getValue());
-		assertThat(userResponse1.getId()).isEqualTo(userRequest1.getId().getValue());
+		User userResponse1 = result.getContent().get(0);
+		assertThat(userResponse1).isEqualTo(userRequest1);
 	}
 	
 	@UnitTest
 	void testUser2ExistsUsers() {
-		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithUsers());
+		PageNumber pageNumber = new PageNumber(1);
+		Mockito.when(userPersistence.findAll(pageNumber)).thenReturn(createPaginationWithUsers());
 		
-		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
+		Pagination<User> result = userService.getUsers(pageNumber);
 		
 		User userRequest2 = createUserRequest2();
-		UserList userResponse2 = result.getUsersPagination().getContent().get(1);
-		assertThat(userResponse2.getEmail()).isEqualTo(userRequest2.getEmail().getValue());
-		assertThat(userResponse2.getId()).isEqualTo(userRequest2.getId().getValue());
+		User userResponse2 = result.getContent().get(1);
+		assertThat(userResponse2).isEqualTo(userRequest2);
 	}
 	
 	@UnitTest
 	void testNotExistsUsers() {
-		Mockito.when(userPersistence.findAll(Optional.ofNullable(null))).thenReturn(createPaginationWithoutUsers());
+		PageNumber pageNumber = new PageNumber(1);
+		Mockito.when(userPersistence.findAll(pageNumber)).thenReturn(createPaginationWithoutUsers());
 		
-		GetUsersResponse result = userService.getUsers(GetUsersRequest.builder().pageNumber(null).build());
+		Pagination<User> result = userService.getUsers(pageNumber);
 		
-		assertThat(result.getUsersPagination().getPageNumber()).isEqualTo(1);
-		assertThat(result.getUsersPagination().getTotalElements()).isEqualTo(0);
-		assertThat(result.getUsersPagination().getTotalPages()).isEqualTo(1);
-		assertThat(result.getUsersPagination().getSize()).isEqualTo(15);
-		assertThat(result.getUsersPagination().getContent().size()).isEqualTo(0);
+		assertThat(result.getPageNumber()).isEqualTo(1);
+		assertThat(result.getTotalElements()).isEqualTo(0);
+		assertThat(result.getTotalPages()).isEqualTo(1);
+		assertThat(result.getSize()).isEqualTo(15);
+		assertThat(result.getContent().size()).isEqualTo(0);
 	}
 }

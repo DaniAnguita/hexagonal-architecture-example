@@ -2,6 +2,7 @@ package com.company.demo.user.ports.out;
 
 import java.util.Optional;
 
+import com.company.demo.common.model.PageNumber;
 import com.company.demo.common.model.Pagination;
 import com.company.demo.user.model.User;
 
@@ -11,5 +12,5 @@ public interface UserPersistencePort {
 	
 	User addUser(User user);
 	Optional<User> findById(long id);
-	Pagination<User> findAll(Optional<Integer> pageNumber);
+	Pagination<User> findAll(PageNumber pageNumber);
 }

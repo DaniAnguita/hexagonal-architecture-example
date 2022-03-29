@@ -1,6 +1,6 @@
 package com.company.demo.user.api.dto;
 
-import com.company.demo.user.param.GetUserResponse;
+import com.company.demo.user.model.User;
 
 import lombok.Builder;
 import lombok.Value;
@@ -13,7 +13,12 @@ public class GetUserResponseDto {
     String surname;
     String status;
     
-    public static GetUserResponseDto of(GetUserResponse response) {
-    	return GetUserResponseMapper.INSTANCE.domainToDto(response);
+    public static GetUserResponseDto of(User user) {
+    	return GetUserResponseDto.builder()
+    			.email(user.getEmail().getValue())
+    			.name(user.getName().getValue())
+    			.surname(user.getSurname().getValue())
+    			.status(user.getStatus().toString())
+    			.build();
     }
 }

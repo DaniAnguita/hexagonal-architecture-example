@@ -1,10 +1,21 @@
 package com.company.demo.user.model;
 
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotNull;
+
+import com.company.demo.common.model.DomainModel;
+import com.company.demo.user.exception.InvalidUserIdException;
+
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
-@AllArgsConstructor
-public class UserId {
+@EqualsAndHashCode(callSuper=false)
+public class UserId extends DomainModel<UserId> {
+	@NotNull
 	Long value;
+	
+	public UserId(Long value) {
+		this.value = value;
+		validateSelf(InvalidUserIdException::new);
+	}
 }

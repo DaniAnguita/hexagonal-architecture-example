@@ -19,8 +19,7 @@ import com.company.demo.user.model.Name;
 import com.company.demo.user.model.Status;
 import com.company.demo.user.model.Surname;
 import com.company.demo.user.model.User;
-import com.company.demo.user.param.GetUserRequest;
-import com.company.demo.user.param.GetUserResponse;
+import com.company.demo.user.model.UserId;
 import com.company.demo.user.ports.in.UserServicePort;
 import com.company.demo.user.ports.out.UserPersistencePort;
 import com.company.demo.user.service.UserServiceImpl;
@@ -51,7 +50,7 @@ public class UserServiceImplGetUserUnitTests {
 		Mockito.when(userPersistence.findById(1l)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(UserNotFoundException.class, () -> {
-			userService.getUser(new GetUserRequest(1l));
+			userService.getUser(new UserId(1l));
 		});
 	}
 	
@@ -60,12 +59,12 @@ public class UserServiceImplGetUserUnitTests {
 		User user = createUser();
 		Mockito.when(userPersistence.findById(1l)).thenReturn(Optional.of(user));
 		
-		GetUserResponse result = userService.getUser(new GetUserRequest(1l));
+		User userResult = userService.getUser(new UserId(1l));
 		
-		assertThat(result.getEmail()).isEqualTo(user.getEmail().getValue());
-		assertThat(result.getName()).isEqualTo(user.getName().getValue());
-		assertThat(result.getSurname()).isEqualTo(user.getSurname().getValue());
-		assertThat(result.getStatus()).isEqualTo(user.getStatus());
+		assertThat(userResult.getEmail()).isEqualTo(user.getEmail());
+		assertThat(userResult.getName()).isEqualTo(user.getName());
+		assertThat(userResult.getSurname()).isEqualTo(user.getSurname());
+		assertThat(userResult.getStatus()).isEqualTo(user.getStatus());
 	}
 
 }

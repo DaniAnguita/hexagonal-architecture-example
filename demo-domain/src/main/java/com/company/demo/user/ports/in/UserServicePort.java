@@ -1,19 +1,12 @@
 package com.company.demo.user.ports.in;
 
-import javax.validation.Valid;
+import com.company.demo.common.model.PageNumber;
+import com.company.demo.common.model.Pagination;
+import com.company.demo.user.model.User;
+import com.company.demo.user.model.UserId;
 
-import org.springframework.validation.annotation.Validated;
-
-import com.company.demo.user.param.AddUserRequest;
-import com.company.demo.user.param.AddUserResponse;
-import com.company.demo.user.param.GetUserRequest;
-import com.company.demo.user.param.GetUserResponse;
-import com.company.demo.user.param.GetUsersRequest;
-import com.company.demo.user.param.GetUsersResponse;
-
-@Validated
 public interface UserServicePort {
-	GetUserResponse getUser(@Valid GetUserRequest request);
-	AddUserResponse addUser(@Valid AddUserRequest signInRequest);
-	GetUsersResponse getUsers(@Valid GetUsersRequest request);
+	User getUser(UserId id);
+	User addUser(User user);
+	Pagination<User> getUsers(PageNumber page);
 }

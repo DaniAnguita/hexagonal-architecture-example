@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import com.company.demo.common.model.PageNumber;
 import com.company.demo.common.model.PagePersistence;
 import com.company.demo.common.model.Pagination;
 import com.company.demo.user.exception.UserAlreadyExistsException;
@@ -37,16 +38,12 @@ public class UserJpaAdapter implements UserPersistencePort {
 	}
 	
 	@Override
-	public Pagination<User> findAll(Optional<Integer> pageNumber) {
+	public Pagination<User> findAll(PageNumber pageNumber) {
 		Page<User> pageUser = userRepository
-				.findAll(PageRequest.of(calculatePageIndex(pageNumber), PAGE_SIZE))
+				.findAll(PageRequest.of(pageNumber.getValue() - 1, PAGE_SIZE))
 				.map(e -> e.toDomain());
 		
 		return PagePersistence.<User>of(pageUser).toDomain();
-	}
-	
-	private int calculatePageIndex(Optional<Integer> pageNumber) {
-		return pageNumber.isPresent() ? pageNumber.get() - 1 : 0;
 	}
 
 }

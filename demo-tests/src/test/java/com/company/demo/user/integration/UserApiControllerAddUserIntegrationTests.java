@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.company.demo.IntegrationTest;
+import com.company.demo.user.api.dto.AddUserRequestDto;
 import com.company.demo.user.jpa.UserJpaRepository;
-import com.company.demo.user.param.AddUserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
@@ -44,7 +44,7 @@ public class UserApiControllerAddUserIntegrationTests {
 		userRepository.deleteByEmail(createValidRequest().getEmail());
 	}
 	
-	ResultActions addUserApi(AddUserRequest request) throws Exception {
+	ResultActions addUserApi(AddUserRequestDto request) throws Exception {
 		return mockMvc.perform(
 				post("/api/user")
 				.content(new ObjectMapper().writeValueAsString(request))
@@ -52,8 +52,8 @@ public class UserApiControllerAddUserIntegrationTests {
 			);
 	}
 
-	public AddUserRequest createValidRequest() {
-		return AddUserRequest.builder()
+	public AddUserRequestDto createValidRequest() {
+		return AddUserRequestDto.builder()
 			.email("test@test.com")
 			.name("name")
 			.surname("surname")
@@ -62,7 +62,7 @@ public class UserApiControllerAddUserIntegrationTests {
 	
 	@IntegrationTest
 	void testAddUserOkAndCheckResponse() throws Exception {
-		AddUserRequest request = createValidRequest();
+		AddUserRequestDto request = createValidRequest();
 		
 		addUserApi(request)
 			.andExpect(status().isCreated())
@@ -76,7 +76,7 @@ public class UserApiControllerAddUserIntegrationTests {
 	
 	@IntegrationTest
 	void testAddUserOkAndCheckUserSaved() throws Exception {
-		AddUserRequest request = createValidRequest();
+		AddUserRequestDto request = createValidRequest();
 		MvcResult result = addUserApi(request).andReturn();
 		int id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 		
@@ -91,7 +91,7 @@ public class UserApiControllerAddUserIntegrationTests {
 	
 	@IntegrationTest
 	void testUserAlreadyExists() throws Exception {
-		AddUserRequest request = createValidRequest();
+		AddUserRequestDto request = createValidRequest();
 		addUserApi(request);
 		
 		addUserApi(request)

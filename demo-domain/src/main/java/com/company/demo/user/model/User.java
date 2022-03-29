@@ -1,9 +1,11 @@
 package com.company.demo.user.model;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-@Value
+@Getter
+@EqualsAndHashCode
 @Builder
 public class User {
 	UserId id;
