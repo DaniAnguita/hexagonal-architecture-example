@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.demo.common.exception.InvalidPageNumberException;
 import com.company.demo.common.model.ExceptionResponse;
 import com.company.demo.common.model.PageNumber;
 import com.company.demo.common.model.Pagination;
@@ -117,17 +118,18 @@ public class UserApiController {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Void> handleUserNotFoundException(UserNotFoundException exception) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-    			.build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(InvalidPageNumberException.class)
+    public ResponseEntity<Void> handleInvalidPageNumberException(InvalidPageNumberException exception) {
+        return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
     	Map<String, String> errors = Collections.singletonMap("email", userMessageSource.getMessageUserAlreadyExists());
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(new ExceptionResponse(errors));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(errors));
     }
 	
 }

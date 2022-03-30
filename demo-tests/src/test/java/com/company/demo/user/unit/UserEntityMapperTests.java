@@ -27,7 +27,7 @@ public class UserEntityMapperTests {
 	}
 	
 	@UnitTest
-	void testDomainToEntityFieldNull() {
+	void testDomainToEntityFieldsNull() {
 		UserEntity entityMapped = UserEntity.of(User.builder().build());
 		assertThat(entityMapped.getId()).isNull();
 	}
